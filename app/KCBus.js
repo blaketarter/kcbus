@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { View, StyleSheet, Metrics } from 'react-native';
+import Map from './Map';
+
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+  },
+});
 
 export default class KCBus extends Component {
   render() {
     return (
-      <Text>Hello World</Text>
+      <View style={styles.container}>
+        <Map />
+      </View>
     );
   }
 }
