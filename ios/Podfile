@@ -20,17 +20,17 @@ target 'kcbus' do
     'BatchedBridge'
   ]
 
-  # pod 'react-native-maps', path: '../node_modules/react-native-maps'
+  pod 'react-native-maps', path: '../node_modules/react-native-maps'
 
 end
 
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    # if target.name == "react-native-google-maps"
-    #   target.build_configurations.each do |config|
-    #     config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
-    #   end
-    # end
+    if target.name == "react-native-google-maps"
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+      end
+    end
   end
 end
