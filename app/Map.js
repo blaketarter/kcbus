@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import MapView from 'react-native-maps';
 import {
   getStopsWithin,
 } from './utils/Stops';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   map: {
-    height: '100%',
+    flex: 1,
   },
 });
 
@@ -22,6 +25,8 @@ export default class Map extends Component {
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
       },
+      stops: [],
+      selected: null,
     };
 
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
@@ -29,7 +34,16 @@ export default class Map extends Component {
   }
 
   onRegionChangeComplete(region) {
-    this.setState({ region });
+    this.setState((state) => {
+      return {
+        region,
+        stops: getStopsWithin(
+          state.region.latitude,
+          state.region.longitude,
+          state.region.latitudeDelta
+        ),
+      };
+    });
   }
 
   componentDidMount() {
@@ -41,6 +55,11 @@ export default class Map extends Component {
             latitude: data.coords.latitude,
             longitude: data.coords.longitude,
           },
+          stops: getStopsWithin(
+            state.region.latitude,
+            state.region.longitude,
+            state.region.latitudeDelta
+          ),
         };
       })
     }, (error) => {
@@ -55,25 +74,20 @@ export default class Map extends Component {
       0
     )[0];
 
-    // console.log(stop);
+    this.setState({ selected: stop });
   }
   
   render() {
-    const stops = getStopsWithin(
-      this.state.region.latitude,
-      this.state.region.longitude,
-      this.state.region.latitudeDelta
-    );
-    
     return (
-      <MapView
+      <View style={styles.container}>
+        <MapView
         style={styles.map}
         region={this.state.region}
         onRegionChangeComplete={this.onRegionChangeComplete}
         onMarkerPress={this.onMarkerPress}
         showsUserLocation>
 
-        {stops.map(stop => {
+        {this.state.stops.map(stop => {
           const coords = {
             latitude: stop.stop_lat,
             longitude: stop.stop_lon,
@@ -86,7 +100,9 @@ export default class Map extends Component {
               title={stop.stop_name} />
           );
         })}
-      </MapView>
+        </MapView>
+        {(this.state.selected) ? <Text>{this.state.selected.stop_name}</Text> : null}
+      </View>
     );
   }
 }
