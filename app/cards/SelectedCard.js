@@ -9,13 +9,18 @@ import {
 
 import {
   openLocation,
-} from './utils/OpenLocationOnMap';
+} from '../utils/OpenLocationOnMap';
+
+import {
+  blue,
+  darkBlue
+} from '../utils/Colors';
 
 const styles = StyleSheet.create({
   container: {
     margin: 10,
     marginBottom: 0,
-    backgroundColor: '#4285F4',
+    backgroundColor: blue,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
@@ -55,7 +60,7 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   bottom: {
-    backgroundColor: '#346AC3',
+    backgroundColor: darkBlue,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 25,

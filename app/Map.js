@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MapView from 'react-native-maps';
-import SelectedCard from './SelectedCard';
+
+import SelectedCard from './cards/SelectedCard';
+import NoStops from './cards/NoStops';
+import StopsList from './cards/StopsList';
+
 import {
   getStopsWithin,
 } from './utils/Stops';
@@ -49,6 +53,7 @@ export default class Map extends Component {
       },
       stops: [],
       selected: null,
+      loaded: false,
     };
 
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
@@ -87,6 +92,7 @@ export default class Map extends Component {
             state.region.longitude,
             state.region.latitudeDelta
           ),
+          loaded: true,
         };
       })
     }, (error) => {
@@ -109,8 +115,14 @@ export default class Map extends Component {
   }
 
   renderCards() {
+    if (this.state.loaded && !this.state.selected && !this.state.stops.length) {
+      console.log('nothing');
+      return (
+        <NoStops />
+      );
+    }
+
     if (this.state.selected) {
-      console.log(this.state.selected);
       return (
         <SelectedCard
           name={this.state.selected.stop_name}
@@ -122,6 +134,12 @@ export default class Map extends Component {
           )}
         />
       );
+    }
+
+    if (this.state.stops.length) {
+      // return (
+      //   <StopsList stops={this.state.stops} />
+      // );
     }
   }
   
