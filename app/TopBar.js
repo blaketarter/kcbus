@@ -3,6 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Platform,
 } from 'react-native';
 
 import {
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
   container: {
   },
   statusBar: {
-    height: 20,
+    height: (Platform.OS === 'ios') ? 20 : 0,
     width: '100%',
     // backgroundColor: darkBlue,
     backgroundColor: blue,

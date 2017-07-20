@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import MapView from 'react-native-maps';
 
 import SelectedCard from './cards/SelectedCard';
@@ -58,6 +58,7 @@ export default class Map extends Component {
 
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
     this.onPress = this.onPress.bind(this);
+    this.onMarkerPress = this.onMarkerPress.bind(this);
     this.renderCards = this.renderCards.bind(this);
   }
 
@@ -106,7 +107,7 @@ export default class Map extends Component {
       e.nativeEvent.coordinate.longitude,
       0
     )[0];
-    
+
     if (stop) {
       this.setState({ selected: stop });
     } else {
@@ -114,9 +115,15 @@ export default class Map extends Component {
     }
   }
 
+  onMarkerPress(e) {
+    if (Platform.OS === 'ios') {
+      return;
+    }
+    this.onPress(e);
+  }
+
   renderCards() {
     if (this.state.loaded && !this.state.selected && !this.state.stops.length) {
-      console.log('nothing');
       return (
         <NoStops />
       );
@@ -150,7 +157,8 @@ export default class Map extends Component {
         style={styles.map}
         region={this.state.region}
         onRegionChangeComplete={this.onRegionChangeComplete}
-        onPress={this.onPress}  
+        onPress={this.onPress}
+        onMarkerPress={this.onMarkerPress}  
         showsUserLocation>
 
         {this.state.stops.map(stop => {
