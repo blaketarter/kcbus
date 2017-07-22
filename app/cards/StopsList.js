@@ -14,6 +14,7 @@ import {
 
 // todo: header component is a click to close with x icon
 // todo: maybe use onRefresh to close the list
+// if > 100 stops  just say 99+ and cut to closest 99/100 stops to render
 
 
 const styles = StyleSheet.create({

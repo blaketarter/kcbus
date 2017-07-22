@@ -6,6 +6,7 @@ import SelectedCard from './cards/SelectedCard';
 import NoStops from './cards/NoStops';
 import ShowStops from './cards/ShowStops';
 import StopsList from './cards/StopsList';
+import ZoomButton from './buttons/ZoomButton';
 
 import {
   getStopsWithin,
@@ -13,6 +14,15 @@ import {
 import {
   getDistance,
 } from './utils/GetDistance';
+import {
+  getNextZoomLevel,
+  getPrevZoomLevel,
+  getInitialZoomLevel,
+} from './utils/Zoom';
+import {
+  blue,
+  red,
+} from './utils/Colors';
 
 // todo
 // 1. 'selected stop' component
@@ -40,13 +50,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: 25,
-    backgroundColor: '#F44336',
+    backgroundColor: red,
     alignItems: 'center',
     justifyContent: 'center',
   },
   errorText: {
     color: 'white',
-  }
+  },
+  actionsContainer: {
+    position: 'absolute',
+    right: 0,
+  },
 });
 
 export default class Map extends Component {
@@ -54,6 +68,7 @@ export default class Map extends Component {
     super();
 
     this.state = {
+      zoom: getInitialZoomLevel(),
       myLocation: {
         latitude: 0,
         longitude: 0,
@@ -61,8 +76,6 @@ export default class Map extends Component {
       region: {
         latitude: 39.0997,
         longitude: -94.5786,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
       },
       stops: [],
       selected: null,
@@ -80,16 +93,23 @@ export default class Map extends Component {
     this.selectStop = this.selectStop.bind(this);
     this.closeList = this.closeList.bind(this);
     this.renderError = this.renderError.bind(this);
+    this.renderActions = this.renderActions.bind(this);
+    this.incrementZoom = this.incrementZoom.bind(this);
+    this.decrementZoom = this.decrementZoom.bind(this);
+    this.showSelectedCallout = this.showSelectedCallout.bind(this);
+    this.hideSelectedCallout = this.hideSelectedCallout.bind(this);
   }
   
   onRegionChangeComplete(region) {
+    return; // might not need this
+
     this.setState((state) => {
       return {
         region,
         stops: getStopsWithin(
           state.region.latitude,
           state.region.longitude,
-          state.region.latitudeDelta
+          state.zoom,
         ),
       };
     });
@@ -111,14 +131,12 @@ export default class Map extends Component {
           stops: getStopsWithin(
             state.region.latitude,
             state.region.longitude,
-            state.region.latitudeDelta
+            state.zoom,
           ),
           loaded: true,
         };
       })
     }, (error) => {
-      console.log(error);
-
       this.setState((state) => {
         return {
           loaded: true,
@@ -129,12 +147,42 @@ export default class Map extends Component {
     });
   }
 
+  incrementZoom() {
+    this.setState((state) => {
+      return {
+        zoom: getNextZoomLevel(state.zoom),
+        stops: getStopsWithin(
+          state.region.latitude,
+          state.region.longitude,
+          state.zoom,
+        ),
+      };
+    });
+  }
+
+  decrementZoom() {
+    this.setState((state) => {
+      return {
+        zoom: getPrevZoomLevel(state.zoom),
+        stops: getStopsWithin(
+          state.region.latitude,
+          state.region.longitude,
+          state.zoom,
+        ),
+      };
+    });
+  }
+
   onPress(e) {
     const stop = getStopsWithin(
       e.nativeEvent.coordinate.latitude,
       e.nativeEvent.coordinate.longitude,
       0
     )[0];
+
+    if (this.marker) {
+      this.hideSelectedCallout();
+    }
 
     if (stop) {
       this.setState({ selected: stop });
@@ -171,11 +219,6 @@ export default class Map extends Component {
       return {
         showStops: false,
         selected: stop,
-        region: {
-          ...state.region,
-          latitude: lat,
-          longitude: long,
-        },
       };
     });
   }
@@ -240,17 +283,54 @@ export default class Map extends Component {
     }
     return null;
   }
+
+  renderActions() {
+    return (
+      <View style={styles.actionsContainer}>
+        <ZoomButton onPress={this.incrementZoom} text='+' />
+        <ZoomButton onPress={this.decrementZoom} text='-' />
+      </View>
+    );
+  }
+
+  showSelectedCallout() {
+    if (this.state.selected && this.marker) {
+      this.marker.showCallout();
+    }
+  }
+
+  hideSelectedCallout() {
+    if (this.state.selected && this.marker) {
+      this.marker.hideCallout();
+    }
+  }
+
+  componentDidUpdate() {
+    this.showSelectedCallout();
+  }
   
   render() {
+    const region = {
+      latitude: this.state.region.latitude,
+      longitude: this.state.region.longitude,
+      latitudeDelta: this.state.zoom,
+      longitudeDelta: this.state.zoom,
+    };
+
     return (
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          region={this.state.region}
+          region={region}
           onRegionChangeComplete={this.onRegionChangeComplete}
           onPress={this.onPress}
           onMarkerPress={this.onMarkerPress}
           loadingEnabled
+          zoomEnabled={false}
+          rotateEnabled={false}
+          scrollEnabled={false}
+          pitchEnabled={false}
+          moveOnMarkerPress={false}
           showsUserLocation>
 
         {this.state.stops.map(stop => {
@@ -259,18 +339,31 @@ export default class Map extends Component {
             longitude: stop.stop_lon,
           };
 
+          if (stop === this.state.selected) {
+            return (
+              <MapView.Marker
+                key={stop.stop_id}
+                coordinate={coords}
+                pinColor={blue}
+                ref={(marker) => { this.marker = marker }}
+                title={stop.stop_name} />
+            );
+          }
+
           return (
             <MapView.Marker
               key={stop.stop_id}
               coordinate={coords}
+              pinColor={red}
               title={stop.stop_name} />
           );
         })}
         </MapView>
-        { this.renderError() }
+        { this.renderActions() }
         <View style={styles.cards}>
           { this.renderCards() }
         </View>
+        { this.renderError() }
       </View>
     );
   }
