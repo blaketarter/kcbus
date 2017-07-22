@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     height: (Platform.OS === 'ios') ? 44 : 48,
     width: '100%',
     justifyContent: 'center',
-    alignItems: (Platform.OS === 'ios') ? 'center' : 'flex-start',
+    // alignItems: (Platform.OS === 'ios') ? 'center' : 'flex-start',
+    alignItems: 'center',
     backgroundColor: blue,
   },
   text: {

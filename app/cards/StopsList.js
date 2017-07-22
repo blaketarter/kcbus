@@ -13,6 +13,8 @@ import {
 } from '../utils/GetDistance';
 
 // todo: header component is a click to close with x icon
+// todo: maybe use onRefresh to close the list
+
 
 const styles = StyleSheet.create({
   container: {

@@ -35,6 +35,17 @@ const styles = StyleSheet.create({
     zIndex: 5,
     flex: 1,
     alignSelf: 'flex-end'
+  },
+  error: {
+    position: 'absolute',
+    width: '100%',
+    height: 25,
+    backgroundColor: '#F44336',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    color: 'white',
   }
 });
 
@@ -57,6 +68,8 @@ export default class Map extends Component {
       selected: null,
       loaded: false,
       showStops: false,
+      error: false,
+      errorMessage: null,
     };
 
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
@@ -66,6 +79,7 @@ export default class Map extends Component {
     this.toggleShowStops = this.toggleShowStops.bind(this);
     this.selectStop = this.selectStop.bind(this);
     this.closeList = this.closeList.bind(this);
+    this.renderError = this.renderError.bind(this);
   }
   
   onRegionChangeComplete(region) {
@@ -104,6 +118,14 @@ export default class Map extends Component {
       })
     }, (error) => {
       console.log(error);
+
+      this.setState((state) => {
+        return {
+          loaded: true,
+          error: true,
+          errorMessage: error.message,
+        };
+      });
     });
   }
 
@@ -159,7 +181,6 @@ export default class Map extends Component {
   }
 
   closeList() {
-    console.log('here');
     this.setState((state) => {
       return {
         showStops: false,
@@ -208,6 +229,17 @@ export default class Map extends Component {
       );
     }
   }
+
+  renderError() {
+    if (this.state.error && this.state.errorMessage && this.state.errorMessage.length) {
+      return (
+        <View style={styles.error}>
+          <Text style={styles.errorText}>{ this.state.errorMessage }</Text>
+        </View>
+      );
+    }
+    return null;
+  }
   
   render() {
     return (
@@ -235,6 +267,7 @@ export default class Map extends Component {
           );
         })}
         </MapView>
+        { this.renderError() }
         <View style={styles.cards}>
           { this.renderCards() }
         </View>
