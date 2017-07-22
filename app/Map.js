@@ -4,6 +4,7 @@ import MapView from 'react-native-maps';
 
 import SelectedCard from './cards/SelectedCard';
 import NoStops from './cards/NoStops';
+import ShowStops from './cards/ShowStops';
 import StopsList from './cards/StopsList';
 
 import {
@@ -18,6 +19,7 @@ import {
 // 2. when user clicks on map that isnt a stop deselect a stop
 // 3. 'list of stops' component that shows when there is no selected stop
 // 4. top bar with app name and refresh button and then settings button
+// 5. maybe integrate stop times
 
 const styles = StyleSheet.create({
   container: {
@@ -54,14 +56,18 @@ export default class Map extends Component {
       stops: [],
       selected: null,
       loaded: false,
+      showStops: false,
     };
 
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
     this.onPress = this.onPress.bind(this);
     this.onMarkerPress = this.onMarkerPress.bind(this);
     this.renderCards = this.renderCards.bind(this);
+    this.toggleShowStops = this.toggleShowStops.bind(this);
+    this.selectStop = this.selectStop.bind(this);
+    this.closeList = this.closeList.bind(this);
   }
-
+  
   onRegionChangeComplete(region) {
     this.setState((state) => {
       return {
@@ -122,8 +128,61 @@ export default class Map extends Component {
     this.onPress(e);
   }
 
+  toggleShowStops() {
+    this.setState((state) => {
+      return {
+        showStops: !state.showStops,
+      };
+    });
+  }
+
+  selectStop(lat, long, name) {
+    const stop = getStopsWithin(
+      lat,
+      long,
+      0
+    )[0];
+
+    // todo: show callout
+
+    this.setState((state) => {
+      return {
+        showStops: false,
+        selected: stop,
+        region: {
+          ...state.region,
+          latitude: lat,
+          longitude: long,
+        },
+      };
+    });
+  }
+
+  closeList() {
+    console.log('here');
+    this.setState((state) => {
+      return {
+        showStops: false,
+      };
+    });
+  }
+
   renderCards() {
-    if (this.state.loaded && !this.state.selected && !this.state.stops.length) {
+    if (!this.state.loaded) {
+      return null;
+    }
+
+    if (this.state.showStops) {
+      return (
+        <StopsList
+          stops={this.state.stops}
+          myLocation={this.state.myLocation}
+          closeList={this.closeList}
+          selectStop={this.selectStop} />
+      );
+    }
+
+    if (!this.state.selected && !this.state.stops.length) {
       return (
         <NoStops />
       );
@@ -144,9 +203,9 @@ export default class Map extends Component {
     }
 
     if (this.state.stops.length) {
-      // return (
-      //   <StopsList stops={this.state.stops} />
-      // );
+      return (
+        <ShowStops onPress={this.toggleShowStops} count={this.state.stops.length} />
+      );
     }
   }
   
@@ -154,12 +213,13 @@ export default class Map extends Component {
     return (
       <View style={styles.container}>
         <MapView
-        style={styles.map}
-        region={this.state.region}
-        onRegionChangeComplete={this.onRegionChangeComplete}
-        onPress={this.onPress}
-        onMarkerPress={this.onMarkerPress}  
-        showsUserLocation>
+          style={styles.map}
+          region={this.state.region}
+          onRegionChangeComplete={this.onRegionChangeComplete}
+          onPress={this.onPress}
+          onMarkerPress={this.onMarkerPress}
+          loadingEnabled
+          showsUserLocation>
 
         {this.state.stops.map(stop => {
           const coords = {

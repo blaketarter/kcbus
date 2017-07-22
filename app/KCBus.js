@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Metrics, StatusBar } from 'react-native';
 import Map from './Map';
 import TopBar from './TopBar';
-import { blue } from './utils/Colors';
+import { darkBlue } from './utils/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +15,7 @@ export default class KCBus extends Component {
     return (
       <View style={styles.container}>
         <StatusBar
-          backgroundColor={blue}
+          backgroundColor={darkBlue}
           barStyle="light-content" />
         <TopBar />
         <Map />

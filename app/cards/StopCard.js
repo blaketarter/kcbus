@@ -18,16 +18,10 @@ import {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
     marginBottom: 0,
     backgroundColor: 'white',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    borderColor: '#C0C0C0',
+    borderBottomWidth: 1,
   },
   icon: {
     height: 16,
@@ -36,9 +30,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   text: {
-    fontSize: 22,
+    fontSize: 18,
     color: 'black',
-    fontWeight: 'bold'
   },
   button: {
     justifyContent: 'center',
@@ -46,24 +39,24 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
     alignSelf: 'center',
   },
   distance: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
     alignSelf: 'center',
     color: 'black',
   },
   top: {
     flexDirection: 'row',
-    padding: 25,
+    padding: 15,
   },
   bottom: {
-    backgroundColor: 'white',
+    // backgroundColor: '#DCDCDC',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 25,
+    padding: 15,
   }
 });
 
@@ -77,10 +70,10 @@ export default class StopCard extends Component {
         </View>
         <View style={styles.bottom}>
           <TouchableWithoutFeedback onPress={() => {
-            openLocation(this.props.lat, this.props.long, this.props.name)
+            this.props.selectStop(this.props.lat, this.props.long, this.props.name)
           }}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>{('Open In Maps').toUpperCase()}</Text>
+              <Text style={styles.buttonText}>{('Show On Map').toUpperCase()}</Text>
             </View>
           </TouchableWithoutFeedback>
           <Text style={styles.distance}>{ this.props.distance }</Text>

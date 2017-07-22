@@ -22,13 +22,17 @@ function toRad(val) {
 function getDistance(lat1, lon1, lat2, lon2) {
   let distance = getDistanceKm(lat1, lon1, lat2, lon2);
 
-  distance = fromKmtoMi(distance);
+  return formatDistance(distance);
+}
 
-  if (distance < 0.5) {
-    return nearest50(fromMitoFt(distance)) + ' ft';
+function formatDistance(distance) {
+  const formattedDistance = fromKmtoMi(distance);
+
+  if (formattedDistance < 0.5) {
+    return nearest50(fromMitoFt(formattedDistance)) + ' ft';
   }
 
-  return distance.toFixed(1) + ' mi';
+  return formattedDistance.toFixed(1) + ' mi';
 }
 
 function fromKmtoMi(km) {
@@ -49,4 +53,6 @@ function nearestPoint5(num) {
 
 export {
   getDistance,
+  getDistanceKm,
+  formatDistance,
 };

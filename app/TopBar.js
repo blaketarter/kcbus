@@ -17,14 +17,13 @@ const styles = StyleSheet.create({
   statusBar: {
     height: (Platform.OS === 'ios') ? 20 : 0,
     width: '100%',
-    // backgroundColor: darkBlue,
-    backgroundColor: blue,
+    backgroundColor: (Platform.OS === 'ios') ? blue : darkBlue,
   },
   navBar: {
-    height: 44,
+    height: (Platform.OS === 'ios') ? 44 : 48,
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: (Platform.OS === 'ios') ? 'center' : 'flex-start',
     backgroundColor: blue,
   },
   text: {
