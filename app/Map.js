@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     position: 'absolute',
-    right: 0,
+    right: 5,
+    top: 25,
   },
 });
 
@@ -132,8 +133,8 @@ export default class Map extends Component {
             longitude: data.coords.longitude,
           },
           stops: getStopsWithin(
-            state.region.latitude,
-            state.region.longitude,
+            data.coords.latitude,
+            data.coords.longitude,
             state.zoom,
           ),
           loaded: true,
@@ -145,6 +146,11 @@ export default class Map extends Component {
           loaded: true,
           error: true,
           errorMessage: error.message,
+          stops: getStopsWithin(
+            state.region.latitude,
+            state.region.longitude,
+            state.zoom,
+          ),
         };
       });
     });
@@ -219,8 +225,6 @@ export default class Map extends Component {
       long,
       0
     )[0];
-
-    // todo: show callout
 
     this.setState((state) => {
       return {
@@ -337,7 +341,9 @@ export default class Map extends Component {
           rotateEnabled={false}
           scrollEnabled={false}
           pitchEnabled={false}
+          toolbarEnabled={false}
           moveOnMarkerPress={false}
+          liteMode
           showsUserLocation>
 
         {this.state.stops.map(stop => {
@@ -367,10 +373,10 @@ export default class Map extends Component {
         })}
         </MapView>
         { this.renderActions() }
+        { this.renderError() }
         <View style={styles.cards}>
           { this.renderCards() }
         </View>
-        { this.renderError() }
       </View>
     );
   }

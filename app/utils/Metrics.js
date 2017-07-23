@@ -11,7 +11,8 @@ function statusBarHeight() {
     return iosStatusBarHeight;
   }
 
-  return StatusBar.currentHeight;
+  // return StatusBar.currentHeight;
+  return 0;
 }
 
 export {
