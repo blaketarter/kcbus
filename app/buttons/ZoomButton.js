@@ -3,8 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
+  TouchableNativeFeedback,
+  TouchableOpacity,
   Platform,
-  TouchableWithoutFeedback
 } from 'react-native';
 
 import {
@@ -12,13 +13,18 @@ import {
   darkBlue
 } from '../utils/Colors';
 
+const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
+
 const styles = StyleSheet.create({
-  container: {
+  touchable: {
+    borderRadius: 50,
     margin: 5,
+  },
+  container: {
     borderRadius: 50,
     backgroundColor: 'white',
-    height: 35,
-    width: 35,
+    height: 50,
+    width: 50,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000000',
@@ -37,11 +43,15 @@ const styles = StyleSheet.create({
 export default class ZoomButton extends Component {
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this.props.onPress}>
-        <View style={styles.container}>
-          <Text style={styles.text}>{ this.props.text }</Text>
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={styles.touchable}>
+        <Touchable
+          background={Platform.OS === 'ios' ? null : TouchableNativeFeedback.Ripple(blue, true)}
+          onPress={this.props.onPress}>
+          <View style={styles.container}>
+            <Text style={styles.text}>{ this.props.text }</Text>
+          </View>
+        </Touchable>
+      </View>
     );
   }
 }
