@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, View, Text, Platform, StatusBar } from 'react-native';
 import MapView from 'react-native-maps';
 
 import SelectedCard from './cards/SelectedCard';
@@ -23,6 +23,10 @@ import {
   blue,
   red,
 } from './utils/Colors';
+import {
+  topBarHeight,
+  statusBarHeight,
+} from './utils/Metrics';
 
 // todo
 // 3. 'list of stops' component that shows when there is no selected stop
@@ -33,6 +37,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
+    marginTop: topBarHeight + statusBarHeight(),
   },
   map: {
     height: '100%',

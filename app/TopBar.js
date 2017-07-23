@@ -10,6 +10,10 @@ import {
   blue,
   darkBlue
 } from './utils/Colors';
+import {
+  topBarHeight,
+  iosStatusBarHeight,
+} from './utils/Metrics';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,15 +23,20 @@ const styles = StyleSheet.create({
       height: 3,
     },
     shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.25,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 100,
   },
   statusBar: {
-    height: (Platform.OS === 'ios') ? 20 : 0,
+    height: (Platform.OS === 'ios') ? iosStatusBarHeight : 0,
     width: '100%',
     backgroundColor: (Platform.OS === 'ios') ? blue : darkBlue,
   },
   navBar: {
-    height: (Platform.OS === 'ios') ? 44 : 48,
+    height: topBarHeight,
     width: '100%',
     justifyContent: 'center',
     // alignItems: (Platform.OS === 'ios') ? 'center' : 'flex-start',
