@@ -147,12 +147,14 @@ export default class Map extends Component {
 
   incrementZoom() {
     this.setState((state) => {
+      const nextZoom = getNextZoomLevel(state.zoom);
+
       return {
-        zoom: getNextZoomLevel(state.zoom),
+        zoom: nextZoom,
         stops: getStopsWithin(
           state.region.latitude,
           state.region.longitude,
-          state.zoom,
+          nextZoom,
         ),
       };
     });
@@ -160,12 +162,14 @@ export default class Map extends Component {
 
   decrementZoom() {
     this.setState((state) => {
+      const nextZoom = getPrevZoomLevel(state.zoom);
+
       return {
-        zoom: getPrevZoomLevel(state.zoom),
+        zoom: nextZoom,
         stops: getStopsWithin(
           state.region.latitude,
           state.region.longitude,
-          state.zoom,
+          nextZoom,
         ),
       };
     });

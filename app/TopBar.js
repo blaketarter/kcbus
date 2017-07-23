@@ -13,6 +13,13 @@ import {
 
 const styles = StyleSheet.create({
   container: {
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
   },
   statusBar: {
     height: (Platform.OS === 'ios') ? 20 : 0,
