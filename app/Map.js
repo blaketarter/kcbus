@@ -25,8 +25,6 @@ import {
 } from './utils/Colors';
 
 // todo
-// 1. 'selected stop' component
-// 2. when user clicks on map that isnt a stop deselect a stop
 // 3. 'list of stops' component that shows when there is no selected stop
 // 4. top bar with app name and refresh button and then settings button
 // 5. maybe integrate stop times

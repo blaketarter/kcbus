@@ -1,5 +1,4 @@
-// const levels = [1, 1.5, 2, 2.5];
-const levels = [0.005, 0.01, 0.015, 0.02];
+const levels = [0.005, 0.01, 0.015, 0.02, 0.05, 0.075];
 
 function getInitialZoomLevel() {
   return levels[0];
