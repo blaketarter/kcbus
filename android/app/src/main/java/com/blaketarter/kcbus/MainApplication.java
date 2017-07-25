@@ -1,4 +1,4 @@
-package com.kcbus;
+package com.blaketarter.kcbus;
 
 import android.app.Application;
 
