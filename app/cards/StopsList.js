@@ -19,6 +19,8 @@ import {
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
+    backgroundColor: 'white',
   },
   close: {
     padding: 25,

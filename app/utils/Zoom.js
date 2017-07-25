@@ -25,7 +25,8 @@ function getNextZoomLevel(current) {
 }
 
 export {
+  levels,
   getNextZoomLevel,
   getPrevZoomLevel,
-  getInitialZoomLevel
+  getInitialZoomLevel,
 }

@@ -10,6 +10,7 @@ import ZoomButton from './buttons/ZoomButton';
 
 import {
   getStopsWithin,
+  getZoomLevelWithStop,
 } from './utils/Stops';
 import {
   getDistance,
@@ -121,8 +122,14 @@ export default class Map extends Component {
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((data) => {
+      const {
+        zoomLevel,
+        foundStops,
+      } = getZoomLevelWithStop(data.coords.latitude, data.coords.longitude);
+
       this.setState((state) => {
         return {
+          zoom: zoomLevel,
           region: {
             ...state.region,
             latitude: data.coords.latitude,
@@ -132,11 +139,7 @@ export default class Map extends Component {
             latitude: data.coords.latitude,
             longitude: data.coords.longitude,
           },
-          stops: getStopsWithin(
-            data.coords.latitude,
-            data.coords.longitude,
-            state.zoom,
-          ),
+          stops: foundStops,
           loaded: true,
         };
       })
