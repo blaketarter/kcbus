@@ -20,8 +20,16 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 0,
     backgroundColor: 'white',
-    borderColor: '#C0C0C0',
-    borderBottomWidth: 1,
+    // borderColor: '#C0C0C0',
+    // borderBottomWidth: 1,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowRadius: 1,
+    shadowOpacity: 0.5,
+    margin: 10,
   },
   icon: {
     height: 16,
@@ -38,7 +46,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonText: {
-    color: 'black',
+    color: blue,
     fontSize: 14,
     alignSelf: 'center',
   },
@@ -50,13 +58,14 @@ const styles = StyleSheet.create({
   },
   top: {
     flexDirection: 'row',
-    padding: 15,
+    padding: 25,
+    paddingBottom: 0,
   },
   bottom: {
     // backgroundColor: '#DCDCDC',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 15,
+    padding: 25,
   }
 });
 

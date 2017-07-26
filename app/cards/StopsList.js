@@ -11,6 +11,9 @@ import {
   getDistanceKm,
   formatDistance,
 } from '../utils/GetDistance';
+import {
+  blue,
+} from '../utils/Colors';
 
 // todo: header component is a click to close with x icon
 // todo: maybe use onRefresh to close the list
@@ -20,15 +23,24 @@ import {
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    backgroundColor: 'white',
+    backgroundColor: '#F4F4F4',
   },
   close: {
     padding: 25,
+    paddingBottom: 15,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
-    borderColor: '#C0C0C0',
-    borderBottomWidth: 1,
+    backgroundColor: '#F4F4F4',
+    // borderColor: '#C0C0C0',
+    // borderBottomWidth: 1,
+  },
+  closeIcon: {
+    fontSize: 22,
+    color: blue,
+  },
+  closeText: {
+    color: blue,
   }
 });
 
@@ -70,7 +82,8 @@ export default class StopsList extends Component {
     return (
       <TouchableWithoutFeedback onPress={this.props.closeList}>
         <View style={styles.close}>
-          <Text>Close</Text>
+          {/* <Text style={styles.closeIcon}>&times;</Text> */}
+           <Text style={styles.closeText}>CLOSE</Text> 
         </View>
       </TouchableWithoutFeedback>
     );
@@ -84,6 +97,7 @@ export default class StopsList extends Component {
     return (
       <FlatList
         style={styles.container}
+        removeClippedSubviews
         data={this.state.stops}
         keyExtractor={this.keyExtractor}
         ListHeaderComponent={this.renderHeader}
