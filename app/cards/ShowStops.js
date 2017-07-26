@@ -3,8 +3,16 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableWithoutFeedback,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
+
+import {
+  blue
+} from '../utils/Colors';
+
+const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
 
 const styles = StyleSheet.create({
   container: {
@@ -18,23 +26,53 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 5,
     shadowOpacity: 0.25,
-    padding: 25,
   },
   text: {
-    fontSize: 16,
-    color: '#666666',
-    textAlign: 'center',
+    fontSize: 22,
+    color: 'black',
+    fontWeight: 'bold'
   },
+  button: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: blue,
+    fontSize: 16,
+    alignSelf: 'center',
+  },
+  top: {
+    flexDirection: 'row',
+    padding: 25,
+    paddingBottom: 0,
+  },
+  bottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 25,
+  }
 });
 
 export default class ShowStops extends Component {
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this.props.onPress}>
-        <View style={styles.container}>
-          <Text style={styles.text}>{(`List ${ this.props.count } bus stops near me`).toUpperCase()}</Text>
+      <View style={styles.container}>
+        <View style={styles.top}>
+          <Text style={styles.text}>{(`${this.props.count} bus stops near you`).toUpperCase()}</Text>
         </View>
-      </TouchableWithoutFeedback>
+        <View style={styles.bottom}>
+          <Touchable onPress={this.props.showStops}>
+            <View>
+              <Text style={styles.buttonText}>{('View all stops near you').toUpperCase()}</Text>
+            </View>
+          </Touchable>
+          <Touchable onPress={this.props.refresh}>
+            <View>
+              <Text style={styles.buttonText}>{('Refresh').toUpperCase()}</Text>
+            </View>
+          </Touchable>
+        </View>
+      </View>
     );
   }
 }

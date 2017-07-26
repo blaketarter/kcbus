@@ -29,12 +29,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.25,
   },
-  icon: {
-    height: 16,
-    width: 16,
-    marginRight: 5,
-    paddingTop: 5,
-  },
   text: {
     fontSize: 22,
     color: 'white',

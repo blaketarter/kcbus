@@ -103,6 +103,8 @@ export default class Map extends Component {
     this.decrementZoom = this.decrementZoom.bind(this);
     this.showSelectedCallout = this.showSelectedCallout.bind(this);
     this.hideSelectedCallout = this.hideSelectedCallout.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
   
   onRegionChangeComplete(region) {
@@ -121,6 +123,14 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
+    this.getLocation();
+  }
+
+  refresh() {
+    this.getLocation();
+  }
+
+  getLocation() {
     navigator.geolocation.getCurrentPosition((data) => {
       const {
         zoomLevel,
@@ -282,7 +292,7 @@ export default class Map extends Component {
 
     if (this.state.stops.length) {
       return (
-        <ShowStops onPress={this.toggleShowStops} count={this.state.stops.length} />
+        <ShowStops refresh={this.refresh} showStops={this.toggleShowStops} count={this.state.stops.length} />
       );
     }
   }
